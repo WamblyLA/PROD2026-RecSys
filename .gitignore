@@ -1,0 +1,97 @@
+# Operating systems
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Backups of nested repository metadata
+.git-backup/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging and build output
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test and coverage output
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter runtime files
+.ipynb_checkpoints/
+.jupyter_runtime/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+certificates/
+
+# Logs and local runtime files
+*.log
+*.tmp
+*.temp
+*.pid
+tmp/
+catboost_info/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Raw and generated project data
+/trans600.csv
+/synthetic.zip
+/artifacts/
+/ml/data_in/
+/ml/data_out/
+/ml/tmp
+/synthetic_interactions_run/
+
+# Generated ML artifacts
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.joblib
+*.index
+*.cbm
+*.onnx
+*.pt
+*.pth
+*.ckpt
+
+# DVC local cache
+.dvc/cache/
+.dvc/tmp/

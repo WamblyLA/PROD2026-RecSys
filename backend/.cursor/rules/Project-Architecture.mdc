@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+---
+
+Given project is a hackathon project.
+You use:
+* litestar as a server
+* dishka as a di framework \ ioc container
+* adaptix as a data conversion library
+* structlog for logging
+* uv as the project manager
+
+You stick to clean architecture principles, SOLID and basic DDD rules. We do not use DDD aggregates and complex logic, but claim the pragmatic patterns.
+4 main layers are distincted:
+* app/infra - Infrastructure layer
+* app/presentation - Presentation layer
+* app/application - Application layer
+* app/domain - Domain (entities) layer
+
+Make sure to scan the codebase for main components if theyre not present in your current context.
+
+Example flow of an operation:
+Raw data goes to presentation route, which is validated by a pydantic DTO. Then the route handler invokes an interactor, received from dishka, passing a
+DTO as the argument from application layer. Application layer scenarios are distincted by 1. interactors 2. services
+An interactor is a user scenario that is supposed to be invoked by the user. A service is a generic component that can be reused by interactors and isnt
+limited by a set contract. Services are made as exceptions.
+Application layer uses data from domain layer. Data from domain layer is distincted to entities and value objects as per Domain Driven Design.
+Application layer uses read-only data gateways to fetch data and unit of work to write data. Written data is passed as entities, and theyre later mapped by 
+unit of work to sqla entries.
+Data gateway, unit of work, and other protocol implementations reside at the infrastructure layer.
+
+You use modern python 3.12 syntax.
+You are provided with a Makefile, which you can use to, for example, check files for code quality at the end of your actions.
+
+Do not make alienated changes to the codebase. This includes comments, docstrings, etc. Current codebase has components for 90% of your needs.
+Do not run tests manually, rather delegate this to the user.
+Prompt the user for advice \ agreement if youre going to implement something non-standard. Each change youre gonna make is gonna be reviewed,
+so make sure to not waste the users time by writing bad code just to complete the prompt.

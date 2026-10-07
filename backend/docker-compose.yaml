@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    restart: always
+    command: python src/app/presentation/api/bootstrap/main.py
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: true
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+    volumes:
+      - ./certificates:/certificates:ro
+
+  postgres:
+    image: postgres:17-alpine
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "app"]
+      interval: 5s
+      timeout: 4s
+      start_period: 5s
+      retries: 5
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

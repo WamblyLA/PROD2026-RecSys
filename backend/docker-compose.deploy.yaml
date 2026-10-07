@@ -1,0 +1,68 @@
+services:
+  api:
+    image: ${API_IMAGE:-api:latest}
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      ML_BASE_URL: ${ML_BASE_URL:-http://ml-internal:8080}
+    volumes:
+      - ./certificates:/certificates:ro
+    networks:
+      - default
+      - shared
+
+  postgres:
+    image: postgres:17-alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_EXPOSE_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "app"]
+      interval: 5s
+      timeout: 4s
+      start_period: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default
+      - shared
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - certbot_etc:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot
+    networks:
+      - default
+      - shared
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_etc:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+
+volumes:
+  postgres_data:
+  certbot_etc:
+  certbot_webroot:
+
+networks:
+  shared:
+    name: app_shared_net
+    external: true
